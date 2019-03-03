@@ -1,0 +1,102 @@
+#map {
+    height: 100vh;
+}
+
+.ymaps-2-1-72-balloon,
+.ymaps-2-1-72-balloon .ymaps-2-1-72-balloon__layout {
+    border-radius: 20px;
+}
+
+.ymaps-2-1-72-balloon__close+.ymaps-2-1-72-balloon__content {
+    padding: 0;
+    padding-bottom: 10px;
+    height: 300px;
+    width: 300px;
+}
+
+.header {
+    background-color: #ff8663;
+    color: #fff;
+    padding: 10px;
+}
+
+.feedbacks {
+    overflow-y: scroll;
+    max-height: 160px;
+    padding: 10px;
+}
+
+.feedback__item-head {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.feedback__author {
+    font-weight: 700;
+    margin-right: 5px;
+}
+
+.feedback__place {
+    margin-right: 5px;
+}
+
+.newfeedback {
+    border-top: 1px solid #F5F5F5;
+    padding: 10px;
+    max-height: 270px;
+}
+
+.newfeedback__title {
+    font-style: 20px;
+    color: #ff8663;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.newfeedback__row {
+    margin-bottom: 10px;
+}
+
+.newfeedback__input {
+    border: 1px solid #D3D3D3;
+    border-radius: 5px;
+    padding: 3px 5px;
+    width: 300px;
+}
+
+.newfeedback__textarea {
+    border: 1px solid #D3D3D3;
+    border-radius: 5px;
+    resize: none;
+    padding: 3px 5px;
+    width: 300px;
+}
+
+.newfeedback__input:focus,
+.newfeedback__textarea:focus {
+    border-color: #CCCC00;
+    border-radius: 5px;
+    outline: 0;
+}
+
+.footer {
+    height: 60px;
+    padding: 0 10px;
+}
+
+.footer__button {
+    border: 1px solid transparent;
+    display: block;
+    margin-left: auto;
+    border-radius: 10px;
+    color: #fff;
+    background-color: #ff8663;
+    padding: 5px 10px;
+}
+
+
+.footer__button:focus {
+    outline: none;
+    border-color: #CCCC00;
+}
