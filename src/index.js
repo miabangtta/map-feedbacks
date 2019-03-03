@@ -7,13 +7,6 @@ function init() {
         controls: []
     });
 
-    //  хз что это
-    // if (map) {
-    //     ymaps.modules.require(['Placemark', 'Circle'], function (Placemark, Circle) {
-    //         var placemark = new Placemark([55.37, 35.45]);
-    //     });
-    // }
-
     map.events.add('click', function (e) {
         if (!map.balloon.isOpen()) {
             var coords = e.get('coords');
@@ -22,8 +15,7 @@ function init() {
             } else {
                 console.log(coords);
                 map.balloon.open(coords, {
-                    // contentHeader: 'Событие!',
-                    contentBody: '<header class="header"><div class="header__inner-text">Сюда выводится адрес</div></header>' +
+                    contentBody: '<header class="header"><div class="header__inner-text"></div></header>' +
                         '<div class="feedbacks">' +
                         '<div class="feedback__list">' +
                         '<div class="feedback__item">' +
@@ -40,7 +32,6 @@ function init() {
                         '</div>' +
                         '</div>' +
                         '</div>' +
-
                         '<div class="newfeedback">' +
                         '<div class="newfeedback__title">Ваш отзыв' +
                         '</div>' +
@@ -59,13 +50,13 @@ function init() {
                         '<button class="footer__button">Добавить' +
                         '</button>' +
                         '</div>' +
-
-
-                        '<p>Координаты щелчка: ' + [
-                            coords[0].toPrecision(6),
-                            coords[1].toPrecision(6)
-                        ].join(', ') + '</p></div>',
-                    // contentFooter: '<sup>Щелкните еще раз</sup>'
+                        '</div>',
+                });
+                ymaps.geocode(coords).then(function (res) {
+                    const firstGeoObject = res.geoObjects.get(0);
+                    if (firstGeoObject.getAddressLine().length) {
+                        document.querySelector('.header__inner-text').innerText = firstGeoObject.getAddressLine();
+                    }
                 });
             }
         }
@@ -76,8 +67,30 @@ function init() {
 
 };
 
-const myMap = document.querySelector('#map');
-myMap.addEventListener('click', console.log('click'));
+const sendFeedbackBtn = document.querySelector('.footer__button');
+sendFeedbackBtn.addEventListener('click', function () {
+
+    console.log('click')
+    myGeoObject = new ymaps.GeoObject({
+        // Описание геометрии.
+        geometry: {
+            type: "Point",
+            coordinates: [55.8, 37.8]
+        },
+        // Свойства.
+        properties: {
+            // Контент метки.
+            iconContent: 'Я тащусь',
+            hintContent: 'Ну давай уже тащи'
+        }
+    }, {
+            // Опции.
+            // Иконка метки будет растягиваться под размер ее содержимого.
+            preset: 'islands#blackStretchyIcon',
+            // Метку можно перемещать.
+            draggable: true
+        })
+});
 
 // можно отдельно форму сделать где-то и подтягивать ее
 // уже есть готовая каруселька
