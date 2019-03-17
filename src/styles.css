@@ -19,6 +19,11 @@ body {
     width: 300px;
 }
 
+.ymaps-2-1-73-balloon ymaps.ymaps-2-1-73-balloon__content {
+    margin: 0;
+    padding: 0;
+}
+
 .header {
     background-color: #ff8663;
     color: #fff;
@@ -34,6 +39,11 @@ body {
 .feedback__item-head {
     display: flex;
     flex-wrap: wrap;
+}
+
+.feedback__item {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .feedback__author {
