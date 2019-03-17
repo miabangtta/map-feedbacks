@@ -1,5 +1,21 @@
 ymaps.ready(init);
 
+
+if (!localStorage.length < 7) {
+    let obj = {
+        'coords': [55.76, 37.64],
+        'time': '12.10.2019 11:45',
+        'author': 'Мария',
+        'place': 'Название места',
+        'feedback': 'Тестовый фидбек'
+    };
+
+    let serialObj = JSON.stringify(obj);
+    let createdKey = localStorage.length + 1;
+
+    localStorage.setItem(createdKey, serialObj);
+}
+
 function init() {
     var mapCenter = [55.76, 37.64],
         map = new ymaps.Map("map", {
@@ -31,13 +47,14 @@ function init() {
         clusterBalloonPagerSize: 5
     });
 
-    // Заполняем кластер геообъектами со случайными позициями.
     var placemarks = [];
     let numberOfPlacemarks = localStorage.length ? localStorage.length : 0;
     for (var i = 0, l = numberOfPlacemarks; i < l; i++) {
-        var placemark = new ymaps.Placemark(getRandomPosition(), {
+        if (!localStorage.length) return;
+
+        var placemark = new ymaps.Placemark(getPlacemarkPosition(i + 1), {
             // Устаналиваем данные, которые будут отображаться в балуне.
-            balloonContentHeader: '<header class="header"><div class="header__inner-text">' + getAddress(mapCenter) + '</div></header>',
+            balloonContentHeader: '<header class="header"><div class="header__inner-text">' + getAddress(i + 1) + '</div></header>',
             balloonContentBody: getContentBody(i + 1),
             balloonContentFooter: '<div class="newfeedback">' +
                 '<div class="newfeedback__title">Ваш отзыв' +
@@ -64,23 +81,32 @@ function init() {
     map.geoObjects.add(clusterer);
 
 
-    function getRandomPosition() {
-        return [
-            mapCenter[0] + (Math.random() * 0.3 - 0.15),
-            mapCenter[1] + (Math.random() * 0.5 - 0.25)
-        ];
+    function getPlacemarkPosition(index) {
+        if (!localStorage.length) return;
+        let itemFromLS = localStorage.getItem(index);
+        let placemarksLS = JSON.parse(itemFromLS);
+
+        if (placemarksLS && placemarksLS.coords) return placemarksLS.coords;
     }
 
-    function getAddress(coords) {
-        ymaps.geocode(coords).then(function (res) {
+    function getAddress(index, coordinates) {
+        let coord;
+        if (index) {
+            let itemFromLS = localStorage.getItem(index);
+            let placemarksLS = JSON.parse(itemFromLS);
+            if (!placemarksLS) return;
+            coord = placemarksLS.coords;
+        } else if (coordinates) {
+            coord = coordinates;
+        }
+
+        ymaps.geocode(coord).then(function (res) {
             const firstGeoObject = res.geoObjects.get(0);
             const address = firstGeoObject.getAddressLine();
 
             if (address.length) {
                 return address.toString();
             }
-
-            return '';
         });
     }
 
@@ -88,9 +114,23 @@ function init() {
     function getContentBody(num) {
         let itemFromLS = localStorage.getItem(num);
         let placemarksLS = JSON.parse(itemFromLS);
+        if (!placemarksLS) return;
 
         if (!placemarkBodies) {
-            placemarkBodies =
+            placemarkBodies = [
+                ['<div class="feedback__item">' +
+                    '<div class="feedback__item-head">' +
+                    `<div class="feedback__author">${placemarksLS.author}` +
+                    '</div>' +
+                    `<div class="feedback__place">${placemarksLS.place}` +
+                    '</div>' +
+                    `<div class="feedback__time">${placemarksLS.time}` +
+                    '</div>' +
+                    '</div>' +
+                    `<div class="feedback__comment">${placemarksLS.feedback}` +
+                    '</div>' +
+                    '</div>' +
+                    '</div>'].join('<br/>'),
                 ['<div class="feedback__item">' +
                     '<div class="feedback__item-head">' +
                     `<div class="feedback__author">${placemarksLS.author}` +
@@ -104,19 +144,23 @@ function init() {
                     '</div>' +
                     '</div>' +
                     '</div>'].join('<br/>')
+            ];
         }
-        return '<br>' + placemarkBodies[num % placemarkBodies.length];
+
+        if (placemarkBodies[num % placemarkBodies.length]) {
+            return '<br>' + placemarkBodies[num % placemarkBodies.length];
+        }
     }
-    if (clusterer.getClusters()[0]) {
-        clusterer.balloon.open();
-    }
+    //if (clusterer.balloon && clusterer.getClusters()[0]) {
+    //  clusterer.balloon.open();
+    //}
 
     map.events.add('click', function (e) {
         if (!map.balloon.isOpen()) {
             const coords = e.get('coords');
 
             map.balloon.open(coords, {
-                contentBody: '<header class="header"><div class="header__inner-text">' + getAddress(mapCenter) + '</div></header>' +
+                contentBody: '<header class="header"><div class="header__inner-text">' + getAddress(0, coords) + '</div></header>' +
                     '<div class="newfeedback">' +
                     '<div class="newfeedback__title">Ваш отзыв' +
                     '</div>' +
