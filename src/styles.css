@@ -10,6 +10,7 @@ body {
 .balloon__wrapper {
     height: 100%;
     overflow-y: scroll;
+    width: 105%;
 }
 
 .ymaps-2-1-72-balloon,
@@ -35,14 +36,8 @@ body {
     padding: 10px;
 }
 
-.feedbacks {
-    overflow-y: scroll;
-    padding: 10px;
-}
-
-.feedback__item-head {
-    display: flex;
-    flex-wrap: wrap;
+.feedback__item:last-child {
+    margin-bottom: 10px;
 }
 
 .feedback__author {
@@ -75,7 +70,7 @@ body {
     border: 1px solid #D3D3D3;
     border-radius: 5px;
     padding: 3px 5px;
-    width: 300px;
+    width: 315px;
 }
 
 .newfeedback__textarea {
@@ -83,7 +78,7 @@ body {
     border-radius: 5px;
     resize: none;
     padding: 3px 5px;
-    width: 300px;
+    width: 315px;
 }
 
 .newfeedback__input:focus,
@@ -96,6 +91,7 @@ body {
 .footer {
     height: 60px;
     padding: 0 10px;
+    width: 330px;
 }
 
 .footer__button {

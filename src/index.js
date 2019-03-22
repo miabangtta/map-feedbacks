@@ -21,11 +21,10 @@ function init() {
     map.geoObjects.add(clusterer);
 
     function createBalloon(coords) {
-
-        console.log(map.balloon.isOpen())
-
         ymaps.geocode(coords).then(function (res) {
-            console.log(coords);
+            if (window.balloon && window.balloon.isOpen()) { 
+                window.balloon.close();
+            }
 
             const points = res.geoObjects.get(0).properties.get('text');
 
