@@ -22,10 +22,12 @@ function init() {
 
     function createBalloon(coords) {
         ymaps.geocode(coords).then(function (res) {
-            if (window.balloon && window.balloon.isOpen()) { 
+            if (window.balloon && window.balloon.isOpen()) {
                 window.balloon.close();
             }
-
+            if (window.clusterer && window.clusterer._objectsCounter) {
+                window.clusterer.balloon.close();
+            }
             const points = res.geoObjects.get(0).properties.get('text');
 
             var templateBalloon = ymaps.templateLayoutFactory.createClass(
@@ -140,6 +142,10 @@ function init() {
         const geoObjects = e.get('target');
         if (!geoObjects.getGeoObjects) {
             createBalloon(geoObjects.geometry._coordinates);
+        } else {
+            if (window.balloon && window.balloon.isOpen()) {
+                window.balloon.close();
+            }
         }
     });
 
